@@ -1,3 +1,4 @@
-app:
-    resource: @AppBundle/Controller/
-    type:     annotation
+example:
+    pattern: /app/issue
+    defaults:
+        _controller: example_controller:issueAction

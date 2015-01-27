@@ -1,0 +1,14 @@
+services:
+    example_transport:
+        class: Example
+        factory_class: Example
+        factory_method: fromSession
+        arguments:
+            - @session
+
+    example_controller:
+        class: AppBundle\Controller\DefaultController
+        arguments:
+            - @example_transport
+        tags:
+            - { name: kernel.event_subscriber }

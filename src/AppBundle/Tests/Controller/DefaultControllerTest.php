@@ -6,12 +6,21 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
-    public function testIndex()
+    public function testIssue()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/');
+        $crawler = $client->request('GET', '/app/issue');
+        $response = $client->getResponse();
 
-        $this->assertTrue($crawler->filter('html:contains("Homepage")')->count() > 0);
+        $expected = $response->getContent();
+        static::assertNotEmpty($expected);
+
+        $crawler = $client->request('GET', '/app/issue');
+        $response = $client->getResponse();
+
+        $uuid = $response->getContent();
+        static::assertNotEmpty($uuid);
+        static::assertEquals($expected, $uuid);
     }
 }

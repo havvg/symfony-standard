@@ -3,15 +3,33 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-class DefaultController extends Controller
+class DefaultController implements EventSubscriberInterface
 {
-    /**
-     * @Route("/app/example", name="homepage")
-     */
-    public function indexAction()
+    private $example;
+
+    public function __construct(\Example $example)
     {
-        return $this->render('default/index.html.twig');
+        $this->example = $example;
+    }
+
+    public function issueAction()
+    {
+        return new Response($this->example->getUuid(), Response::HTTP_OK);
+    }
+
+    public function onKernelRequest()
+    {
+        // This is just given to have the services created early enough.
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            KernelEvents::REQUEST => array('onKernelRequest', -2048),
+        );
     }
 }
